@@ -7,20 +7,24 @@ clear
 clc
 
 %% Add the package to path
-strPaths.HFODetector = pwd
-addpath(genpath(strPaths.HFODetector))
+strPaths.HFODetector = pwd % 当前目录
+addpath(genpath(strPaths.HFODetector)) % 将当前目录添加到搜索路径
 
 %% Basic data-structure of this code is the hfo-object which is used as follows:
 % Create an hfo-object by calling the following:
+% 创建类HFO的对象
 hfo = Core.HFO;
 
 %% The data and parameters can be loaded from 
 %% Specify the paths for .mat files for the parameters and date (see README for format of these files)
 %% Parameters
+% 参数文件路径 ./+Demo/Spec/ECoG/Parameters/RSpecPara.mat
 hfo.ParaFileLocation = [strPaths.HFODetector, filesep, '+Demo', filesep,'Spec', filesep,'ECoG', filesep,'Parameters', filesep,'RSpecPara.mat'];
 % see the contents of the folder "PresetParameterCreator" for the format.
+% 数据文件路径 ./+Demo/Spec/ECoG/Data/Data.mat
 hfo.DataFileLocation = [strPaths.HFODetector, filesep, '+Demo', filesep,'Spec', filesep,'ECoG', filesep,'Data', filesep,'Data.mat'];
 % Data must be called "data" and must contain the following fields
+% 数据必须交“data”变量，包含如下属性
 % data.Datasetup
 % data.x_bip 
 % data.lab_bip

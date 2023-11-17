@@ -1,11 +1,11 @@
 classdef ParaAndData
     properties
         %Input
-        ParaFileLocation
-        DataFileLocation      
+        ParaFileLocation % 参数文件路径
+        DataFileLocation % 数据文件路径
         %Output
-        Para
-        Data
+        Para % 参数
+        Data % 数据
     end
     methods     
         %% Load predetermined parameters from a saved .mat file
@@ -13,10 +13,10 @@ classdef ParaAndData
             % input: location of parameter files.mat (string) format
             % output: loaded parameters
             if ischar(obj.ParaFileLocation)
-                load(obj.ParaFileLocation);
-                obj.Para = DetPara;
-                obj.Para.ParaFileLocation = obj.ParaFileLocation;
-            elseif isstruct(obj.ParaFileLocation)
+                load(obj.ParaFileLocation); % 加载参数文件
+                obj.Para = DetPara; % 获取参数
+                obj.Para.ParaFileLocation = obj.ParaFileLocation; % 修改参数中的参数文件路径
+            elseif isstruct(obj.ParaFileLocation) % 如果参数文件路径为结构体，即参数手动输入
                 obj.Para = obj.ParaFileLocation;
                 obj.Para.ParaFileLocation = 'Manual input';
             end

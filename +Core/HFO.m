@@ -1,8 +1,8 @@
 classdef HFO
    properties
 %% Meta 
-      ParaFileLocation = 'No set path'; 
-      DataFileLocation = 'No set path'; 
+      ParaFileLocation = 'No set path'; % 参数文件路径
+      DataFileLocation = 'No set path'; % 数据文件路径
 %% STAGE O.1 Parameters
       Para           
 %% STAGE O.2 Data
@@ -31,7 +31,8 @@ classdef HFO
                strChanContains = {''};
            end
            
-           pad = Core.ParaAndData;
+           pad = Core.ParaAndData; % 创建ParaAndData类的对象
+           % 参数有效性判断
            assert(~isequal(obj.ParaFileLocation, 'No set path'),'Parameter file path invalid.');
            pad.ParaFileLocation = obj.ParaFileLocation;
            
