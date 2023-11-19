@@ -41,8 +41,8 @@ classdef HFO
            pad.DataFileLocation = obj.DataFileLocation;
            
            % loading the parameters and data in
-           pad = pad.loadParameters;
-           pad = pad.loadData(strChanContains);
+           pad = pad.loadParameters; % 加载参数，或设置手动输入参数的标记
+           pad = pad.loadData(strChanContains); % 加载数据和相关的元数据
            
            testParameters(pad);
            

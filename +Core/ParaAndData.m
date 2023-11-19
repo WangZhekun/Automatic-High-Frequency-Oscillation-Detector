@@ -9,6 +9,7 @@ classdef ParaAndData
     end
     methods     
         %% Load predetermined parameters from a saved .mat file
+        % 从.mat文件中加载参数，或者设置手动输入参数的相关标记
         function obj = loadParameters(obj)
             % input: location of parameter files.mat (string) format
             % output: loaded parameters
@@ -20,16 +21,20 @@ classdef ParaAndData
                 obj.Para = obj.ParaFileLocation;
                 obj.Para.ParaFileLocation = 'Manual input';
             end
+            % 初始化startBaseline参数
             if ~isfield(obj.Para, 'startBaseline')
                 obj.Para.startBaseline = 1;
             end
         end
         
         %% Load data and relavant meta-data
+        % 加载数据和相关的元数据
         function obj = loadData(obj, chanContains)
             %input: Parameters, Data file location.mat (string) and cell of
             %channel names (cell of strings)
             %output: Loaded data and computed meta data
+
+            % 获取参数
             maxToJoinPARA = obj.Para.maxIntervalToJoinPARA;
             MinHiEntrPARA = obj.Para.MinHighEntrIntvLenPARA;
             minETPARA     = obj.Para.minEventTimePARA;
@@ -37,21 +42,21 @@ classdef ParaAndData
             durBaseline   = obj.Para.DurBaseline; 
             startBasline  = obj.Para.startBaseline;
             
-            if ischar(obj.DataFileLocation)
+            if ischar(obj.DataFileLocation) % 数据路径为字符串
                 obj.Data.DataFileLocation  = obj.DataFileLocation; 
-                load(obj.DataFileLocation, 'data')
-            elseif isstruct(obj.DataFileLocation)
+                load(obj.DataFileLocation, 'data') % 加载数据文件中的data变量
+            elseif isstruct(obj.DataFileLocation) % 数据路径为结构体，即手动输入数据
                 obj.Data.DataFileLocation  = 'Manual Input';
                 data = obj.DataFileLocation;
             end
 
             try
-                data.lab_bip = data.bib_lab;
+                data.lab_bip = data.bib_lab; % 将data数据中的bib_lab属性转为lab_bip属性
             catch
             end
-            % read
-            if  isfield(data, 'Datasetup')
-                obj.Data.dataSetup = data.Datasetup;% Electrode dimensions  
+            % read 读取数据中的Datasetup属性
+            if  isfield(data, 'Datasetup') % 数据中是否包含Datasetup字段
+                obj.Data.dataSetup = data.Datasetup;% Electrode dimensions 电极维度，将data中的Datasetup属性值放到obj.Data.dataSetup中
             else
                 obj.Data.dataSetup = [];
             end
@@ -64,7 +69,7 @@ classdef ParaAndData
             % intermediate values
             lenSig = length(obj.Data.signal);
             nbChan = length(obj.Data.channelNames);
-            nbSamples = size(obj.Data.signal,1);
+            nbSamples = size(obj.Data.signal,1); % 取行数
             fs =  obj.Data.sampFreq;
             sigdur = lenSig/fs;
             % computed
@@ -108,6 +113,7 @@ classdef ParaAndData
         end
         
     end
+    % 定义静态方法
     methods(Static)
         function [signal, chanNames] = getSignal(x_bip, lab_bip, chanContains)
             % Input: signal, channel labels, cell of strings
