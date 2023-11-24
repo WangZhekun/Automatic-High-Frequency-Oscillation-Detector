@@ -1,3 +1,4 @@
+% 参数和数据类
 classdef ParaAndData
     properties
         %Input
@@ -61,7 +62,7 @@ classdef ParaAndData
                 obj.Data.dataSetup = [];
             end
             
-            [sign, chanNames]           = Core.ParaAndData.getSignal(data.x_bip, data.lab_bip, chanContains);
+            [sign, chanNames]           = Core.ParaAndData.getSignal(data.x_bip, data.lab_bip, chanContains); % 获取信号和通道名称
             obj.Data.signal             = sign;
             obj.Data.channelNames       = chanNames;  
             obj.Data.sampFreq           = data.fs;  
@@ -86,12 +87,13 @@ classdef ParaAndData
             obj.Data.nbChannels         = nbChan;
             obj.Data.nbSamples          = nbSamples;
             
-            electrodeInfo = Core.ParaAndData.sortElectrodes(chanNames);
+            electrodeInfo = Core.ParaAndData.sortElectrodes(chanNames); % 根据通道名称判断电极信息
             obj.Data.electrodeInfo = electrodeInfo;
             
         end
         
         %% Test detector parameters against data for consistency
+        % 检查数据和参数的一致性
         function [] = testParameters(obj)
             % Input: parameters, data and meta data (all computed above)
             % Output: warnings and errors if inconistencies are detected.
@@ -115,27 +117,29 @@ classdef ParaAndData
     end
     % 定义静态方法
     methods(Static)
+        % 获取信号和通道名称
         function [signal, chanNames] = getSignal(x_bip, lab_bip, chanContains)
             % Input: signal, channel labels, cell of strings
             %extracts channel data of channels with names containing 'chanContains'
             % output: selected signal and channel labels
-            maskChanContains = contains(lab_bip, chanContains);
-            if min(size(x_bip)) == 1
-                signal        = x_bip';
+            maskChanContains = contains(lab_bip, chanContains); % 确定lab_bip是否包含chanContains
+            if min(size(x_bip)) == 1 % x_bip长度最小的维度为1
+                signal        = x_bip'; % 转置矩阵
             else
-                signal        = x_bip(maskChanContains ,:)';
+                signal        = x_bip(maskChanContains ,:)'; % TODO 需要参考输入项
             end
-            chanNames = lab_bip(maskChanContains);
+            chanNames = lab_bip(maskChanContains); % TODO 需要参考输入项
             
         end
         
         %% sorting Electrodes
+        % 根据chan_names判断电极信息
         function electrodeInfo = sortElectrodes(chan_names)
             % this function looks at the given names of the electrode
             % contacts and then decides whether it is scalp, ECoG or iEEG
             % Then it proceeds to group them
-            if any(contains(chan_names,{'A' 'C' 'F' 'P' 'O' 'Fp' 'T'}))
-                ElecType = 'Scalp';
+            if any(contains(chan_names,{'A' 'C' 'F' 'P' 'O' 'Fp' 'T'})) % 通道包含这些字符串中的任意一个
+                ElecType = 'Scalp'; % 头皮
             else
                 ElecType = 'Unknown'; 
             end

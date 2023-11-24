@@ -1,10 +1,12 @@
 classdef Baseline
     properties
-        hfo
-        Output
+        hfo % HFO类的对象
+        Output % 基线处理的输出结果，包含maxNoisemuV属性
+        % maxNoisemuV为最大噪音阈值
     end
     methods
-%% Set the noise threshold        
+%% Set the noise threshold   
+        % 设置最大噪音阈值
         function obj = setBaselineMaxNoisemuV(obj)
             % input: parameters, data and signal
             % output: maximum noise threshold
@@ -15,9 +17,9 @@ classdef Baseline
              
              isNoisePreSet = ~isempty(ConstMaxNoisemuV);
              if isNoisePreSet 
-                obj.Output.maxNoisemuV = ConstMaxNoisemuV.*ones(1, nbChan) ;
+                obj.Output.maxNoisemuV = ConstMaxNoisemuV.*ones(1, nbChan) ; % 创建一个1*nbChan的矩阵，并与ConstMaxNoisemuV做按元素乘法
              else
-                obj.Output.maxNoisemuV = maxNoisePARA.*std(filtSignal);
+                obj.Output.maxNoisemuV = maxNoisePARA.*std(filtSignal); % 对filtSignal延第一个维度计算标准差，并与maxNoisePARA做按元素乘法
              end
         end       
         
@@ -34,11 +36,11 @@ classdef Baseline
             FiltSig      = Hfo.filtSig.filtSignal;
                         
             % Pre-allocate variable sizes
-            obj.Output.baselineThr = nan(1,nbChannels);
-            for iChan = 1 : nbChannels 
+            obj.Output.baselineThr = nan(1,nbChannels); % 创建1*nbChannels的，值为NaN的矩阵
+            for iChan = 1 : nbChannels % 遍历通道数
                 disp(['Getting baseline for channel ',num2str(iChan),' of ',num2str(nbChannels)])
-                EnvelopeCHAN                            = Envelope(:,iChan);
-                FiltSigCHAN                             = FiltSig(:,iChan);
+                EnvelopeCHAN                            = Envelope(:,iChan); % 取包络线的第iChan列，即第iChan个通道
+                FiltSigCHAN                             = FiltSig(:,iChan); % 取数据的第iChan列，即第iChan个通道
                 
                 [IndBaseline, tookFullSig]              = Core.Baseline.getIndBaseline(Hfo, maxNoise(iChan), iChan);
                 [BaselineStr, BaselineLen, BaselineEnd] = Core.Baseline.getBaselineIndCHAN(IndBaseline);

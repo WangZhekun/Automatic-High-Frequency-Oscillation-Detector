@@ -23,7 +23,7 @@ classdef HFO
       EventPropTable
    end
    methods
-       %% STAGE O: Loading
+       %% STAGE O: Loading 加载
        function obj = getParaAndData(obj, strChanContains)
            % This function calls the ParaAndData class that loads
            % parameters and data into the HFO class
@@ -44,20 +44,20 @@ classdef HFO
            pad = pad.loadParameters; % 加载参数，或设置手动输入参数的标记
            pad = pad.loadData(strChanContains); % 加载数据和相关的元数据
            
-           testParameters(pad);
+           testParameters(pad); % 检查数据和参数的一致性
            
            obj.Para = pad.Para;
            obj.Data = pad.Data;
        end
        
-       %% STAGE I: Filtering
+       %% STAGE I: Filtering 滤波
        function obj = getFilteredSignal(obj, smoothBool)
            % This function calls the FilterSignal class and its methods
-           filtsig = Core.FilterSignal;
-           filtsig.hfo = obj;
+           filtsig = Core.FilterSignal; % 创建FilterSignal类的对象
+           filtsig.hfo = obj; % 建立HFO对象和FilterSignal对象的关联关系
            
-           filtsig = filtsig.filterSignal;
-           filtsig = filtsig.getSignalEnvelope(smoothBool);
+           filtsig = filtsig.filterSignal; % 对obj.Data即数据，进行零相位数字滤波
+           filtsig = filtsig.getSignalEnvelope(smoothBool); % 获取数据的包络线，smoothBool表示是否对包络线做平滑处理
            
            obj.filtSig = filtsig.Output;
        end
@@ -65,10 +65,10 @@ classdef HFO
        %% STAGE II: Baselining
        function obj = getBaselineEntropy(obj, timeIntervalSec)
            % This function calls the Baseline class and its methods
-           bl = Core.Baseline;
+           bl = Core.Baseline; % 创建Baseline类的对象
            bl.hfo = obj;
            
-           bl = setBaselineMaxNoisemuV(bl);
+           bl = setBaselineMaxNoisemuV(bl); % 设置最大噪音阈值
            if nargin == 1
                bl = getBaselineEntropy(bl);
            else
@@ -81,9 +81,9 @@ classdef HFO
        function obj = getBaselineSTD(obj)
            % This function calls the Baseline class and its
            % methods (quick and dirty version)
-           bl = Core.Baseline;
+           bl = Core.Baseline; % 创建Baseline类的对象
            bl.hfo = obj;
-           bl = setBaselineMaxNoisemuV(bl);
+           bl = setBaselineMaxNoisemuV(bl); % 设置最大噪音阈值
 %            bl = setBaselineMaxNoisemuV(bl);
            bl = bl.getBaselineSTD;
            obj.baseline = bl.Output;

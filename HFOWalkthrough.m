@@ -32,13 +32,13 @@ hfo.DataFileLocation = [strPaths.HFODetector, filesep, '+Demo', filesep,'Spec', 
 %% Load the parameters and data, this extracts relavant information from the
 % above mentioned files to the hfo-object.
 chanContains    = '';
-hfo = getParaAndData(hfo, chanContains);%, data);
+hfo = getParaAndData(hfo, chanContains);%, data); % 获取参数和数据
 % data: optional imput to overide the file path, useful for running from
 % work space. Must be in correct format.
 %% This step produces filtered signal based on specification given in the
 % parameters file. The envelope of the filtered signal is also computed.
 smoothBool = false;
-hfo = getFilteredSignal(hfo, smoothBool);
+hfo = getFilteredSignal(hfo, smoothBool); % 对数据进行滤波，并计算包络线
 % smoothBool: boolean value specifying if the envelope is to be smoothed.
 %% Events are described in contradiction to the background which is
 % defind by the baseline. This code computes the baseline using entropy.
